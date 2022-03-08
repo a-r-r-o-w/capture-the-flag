@@ -245,7 +245,32 @@ There is a zip file hidden in the image which can be figured out using something
 
 <img src="./images/heavens.png" alt="heavens.png" style="zoom:25%;" /><img src="./images/earth.png" alt="earth.png" style="zoom:25%;" />
 
-There was nothing hidden in the extracted images. If we just take those pixels where the two images are not the same and create a new image, we get a ciphertext.
+There was nothing hidden in the extracted images. If we just take those pixels where the two images are not the same and create a new image, we get a ciphertext. To do this, I wrote a simple script:
+
+```python
+from PIL import Image
+
+img1 = Image.open('heavens.png')
+img2 = Image.open('earth.png')
+pixels1 = img1.load()
+pixels2 = img2.load()
+
+new_image = Image.new('RGB', img1.size)
+pixels = new_image.load()
+
+print(img1.size, img1.size)
+
+w, h = img1.size
+
+for i in range(w):
+    for j in range(h):
+        if pixels1[i, j] == pixels2[i, j]:
+            pixels[i, j] = (0, pixels1[i, j], 0)
+        else:
+            pixels[i, j] = (0, 0, 0)
+
+new_image.save('result.png')
+```
 
 <img src="./images/result.png" alt="result" style="zoom:33%;" />
 
